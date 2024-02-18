@@ -1,0 +1,98 @@
+#include <array> 
+#include <iostream>
+#include <iterator> 
+#include <algorithm>
+#include <vector>
+#include <cmath>
+
+int startSquareNumber() {
+    std::cout << "Start where?: ";
+    int num{};
+    std::cin >> num;
+
+    return num;
+}
+
+int startGeneratedSquareNumber() {
+    std::cout << "How many?: ";
+    int num{};
+    std::cin >> num;
+
+    return num;
+}
+
+int multiplySquareNumberBy(int startingGeneratedNumber) {
+    std::cout << "I generated " << startingGeneratedNumber << " square numbers. Do you know what each number is after multiplying it by 2?\n";
+    return 2;
+}
+
+void errorMessage(int num, std::vector<int>& array) {
+    int number{ *std::min_element(array.begin(), array.end(), [=](int a, int b) {return std::abs(a - num) < std::abs(b - num);  }) };
+    if ((std::abs(number - num)) <= 4) {
+        std::cout << "Try " << number << " next time.\n";
+    }
+    else {
+        std::cout << num << " is wrong!\n";
+    }
+}
+
+void successMessage(int num) {
+    std::cout << "Nice! " << num << " numbers left.\n";
+}
+
+int customNumberF() {
+    std::cout << "> ";
+    int num{};
+    std::cin >> num;
+
+    return num;
+}
+
+int main()
+{
+    int startingNumber{ startSquareNumber() };
+    int startingGeneratedNumber{ startGeneratedSquareNumber() };
+    int multipliy{ multiplySquareNumberBy(startingGeneratedNumber) };
+
+    std::vector<int> array(11);
+    //10 will be the max squareNumber...
+    int index{ 0 };
+    for (int i{ startingNumber }; i < 11 + startingNumber; i++) {
+        array[index] = (i * i) *multipliy;
+        index++;
+    }
+    //array is now initialized + multiplied by 2
+
+    bool didWin{ false };
+    int numberLeft{ startingGeneratedNumber };
+    while (!didWin) {
+        bool check{false};
+        std::cout << "> ";
+        int num{};
+        std::cin >> num;
+        auto found{ std::find(array.begin(), array.end(), num) };
+        
+        for (int value : array) {
+            if (value == num) {
+                numberLeft -= 1;
+                array.erase(found);
+                check = true;
+                if (numberLeft == 0) {
+                    didWin = true;
+                    break;
+                }
+                successMessage(numberLeft);
+            }
+        }
+        if (!check) {
+            errorMessage(num, array);
+            break;
+        }
+
+    }
+
+    if (didWin) {
+        std::cout << "Nice! You found all numbers, good job!\n";
+    }
+    return 0;
+}
