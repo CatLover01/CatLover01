@@ -1,0 +1,237 @@
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <string_view>
+#include <cstdint>
+#include <Random>
+#include <numeric>
+
+constexpr int g_consoleLines{ 25 };
+
+class Direction {
+public:
+    enum Type {
+        up,
+        down,
+        left,
+        right,
+
+        max_directions
+    };
+private:
+    Type actualDirection{ up };
+
+public:
+    Direction(Type direction) : actualDirection{ direction } {};
+    Type getType() { return actualDirection; };
+
+    Direction operator- () const {
+        switch (actualDirection) {
+        case up:
+            return Direction{ down };
+        case down:
+            return Direction{ up };
+        case left:
+            return Direction{ right };
+        case right:
+            return Direction{ left };
+        }
+
+        return Direction{ up };
+    };
+    friend std::ostream& operator<< (std::ostream& out, Direction& direction) {
+
+        switch (direction.getType()) {
+        case Direction::up:
+            return (out << "up");
+        case Direction::down:
+            return (out << "down");
+        case Direction::left:
+            return (out << "left");
+        case Direction::right:
+            return (out << "right");
+        }
+
+        return out;
+    }
+};
+
+class Tile {
+private:
+    int m_tileNumber{};
+
+public:
+    Tile() = default;
+    explicit Tile(int num) : m_tileNumber{ num } {};
+    int getNum() { return m_tileNumber; };
+    bool isEmpty() { return m_tileNumber == 0; };
+
+    friend std::ostream& operator<< (std::ostream& out, const Tile& tile) {
+        if (tile.m_tileNumber == 0) {
+            out << "    ";
+        }
+        else if (tile.m_tileNumber > 9) {
+            out << " " << tile.m_tileNumber << " ";
+        }
+        else if (tile.m_tileNumber > 0) {
+            out << "  " << tile.m_tileNumber << " ";
+        }
+        return out;
+    }
+};
+
+struct Point {
+    int m_x{};
+    int m_y{};
+    Point getAdjacentPoint(Direction dir) {
+        switch (dir.getType()) {
+        case Direction::up:
+            return Point{ m_x + 1 , m_y };
+        case Direction::down:
+            return Point{ m_x - 1, m_y };
+        case Direction::left:
+            return Point{ m_x , m_y + 1 };
+        case Direction::right:
+            return Point{ m_x , m_y - 1};
+        }
+        return Point{ m_x, m_y };
+    }
+    friend bool operator== (const Point& p1, const Point& p2) {
+        return p1.m_x == p2.m_x && p1.m_y == p2.m_y;
+    }
+
+    friend bool operator!= (const Point& p1, const Point& p2) {
+        return !(p1 == p2);
+    }
+
+};
+
+class Board {
+private:
+    static const int numberTilesRow{ 4 };
+    Tile array[numberTilesRow][numberTilesRow]{
+        Tile{1}, Tile{2}, Tile{3}, Tile{4},
+        Tile{5}, Tile{6}, Tile{7}, Tile{8},
+        Tile{9}, Tile{10}, Tile{11}, Tile{12},
+        Tile{13}, Tile{14}, Tile{15}, Tile{0} };
+
+public:
+    Board() = default;
+
+    static void printEmptyLines(int count) {
+        for (int i{}; i < count; i++) {
+            std::cout << '\n';
+        }
+    }
+
+    friend std::ostream& operator<< (std::ostream& out, const Board& board) {
+        board.printEmptyLines(g_consoleLines);
+
+        for (int i{ 0 }; i < numberTilesRow; i++) {
+
+            for (int j{ 0 }; j < numberTilesRow; j++) {
+                out << board.array[i][j];
+            }
+            out << '\n';
+        }
+        return out;
+    }
+    
+    bool isPointValid(Point& point) {
+        return (point.m_x >= 0 && point.m_y >= 0 && point.m_x < numberTilesRow && point.m_y < numberTilesRow);
+    }
+
+    Point findPositionEmptyTile() {
+        for (int i{ 0 }; i < numberTilesRow; i++) {
+            for (int j{ 0 }; j < numberTilesRow; j++) {
+                if (array[i][j].isEmpty()) {
+                    return {i, j};
+                }
+            }
+        }
+    }
+
+    void swapTiles(Point& p1, Point& p2) {
+        std::swap(array[p1.m_x][p1.m_y], array[p2.m_x][p2.m_y]);
+    }
+
+    bool moveTile(Direction dir) {
+        Point emptyTile{ findPositionEmptyTile()};
+        Point adjacentTile{ emptyTile.getAdjacentPoint(dir) };
+
+        if (!isPointValid(adjacentTile)) {
+            return false;
+        }
+
+        swapTiles(emptyTile, adjacentTile);
+        return true;
+    }
+};
+
+namespace userInput {
+    bool isValid(char chr) {
+        return chr == 'w' || chr == 'a' || chr == 's' || chr == 'd' || chr == 'q';
+    }
+
+    void ignoreLine()
+    {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
+    char getCharacter() {
+        char valueEntered{};
+        std::cin >> valueEntered;
+        ignoreLine();
+        return valueEntered;
+    }
+
+    char getCommandFromUser() {
+        char ch{};
+        while (!isValid(ch)) {
+            ch = getCharacter();
+        }
+
+        return ch;
+    }
+
+    Direction charToDirection(char ch) {
+        switch (ch) {
+        case 'w':
+            return Direction{ Direction::up };
+        case 's':
+            return Direction{ Direction::down };
+        case 'a':
+            return Direction{ Direction::left };
+        case 'd':
+            return Direction{ Direction::right };
+        }
+
+        return Direction{ Direction::up };
+    }
+
+}
+
+int main()
+{
+    //starting board
+    Board board{};
+    std::cout << board;
+
+    //main loop
+    while (true) {
+        char ch{ userInput::getCommandFromUser() };
+
+        if (ch == 'q') {
+            std::cout << "\n\nBye\n\n";
+            return 0;
+        }
+
+        Direction dir{ userInput::charToDirection(ch) };
+        bool check{ board.moveTile(dir) };
+        if (check) {
+            std::cout << board;
+        }
+    }
+    return 0;
+}
