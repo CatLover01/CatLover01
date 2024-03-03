@@ -4,9 +4,6 @@
 #include <thread>
 #include <chrono>
 
-//function prototype
-std::string stringPoints(int num);
-
 //pong project!
 int main()
 {
@@ -100,7 +97,7 @@ int main()
         if (shapeBall.getPosition().x > width - ballRadius) {
             shapeBall.setPosition(static_cast<float>(width) / 2, static_cast<float>(height) / 2);
             tempAiPoints++;
-            aiText.setString(stringPoints(tempAiPoints));
+            aiText.setString(std::to_string(tempAiPoints));
             if (tempAiPoints >= 5) {     //Ai won!
                 window.clear();
                 endingText.setString("You lost idiot!");
@@ -115,7 +112,7 @@ int main()
         else if (shapeBall.getPosition().x < 0 + ballRadius) {
             shapeBall.setPosition(static_cast<float>(width) / 2, static_cast<float>(height) / 2);
             tempPlayerPoints++;
-            playerText.setString(stringPoints(tempPlayerPoints));
+            playerText.setString(std::to_string(tempPlayerPoints));
             if (tempPlayerPoints >= 5) {    //Player won!
                 window.clear();
                 window.draw(endingText);
@@ -162,21 +159,4 @@ int main()
     }
 
     return 0;
-}
-
-std::string stringPoints(int num) {
-    switch (num) {
-    case 1:
-        return "1";
-    case 2:
-        return "2";
-    case 3:
-        return "3";
-    case 4:
-        return "4";
-    case 5:
-        return "5";
-    default:
-        return "???";
-    }
 }
