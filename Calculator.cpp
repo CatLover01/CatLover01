@@ -62,27 +62,27 @@ void operationQueueFunc(std::queue<int>& numberQueue, char operation)
 
 std::string evaluateExpression(const std::string& expression) 
 {
-
     // Iniatiliazing Stacks
     std::stack<char>operationStack;
     std::stack<int>numberStack;
 
-    for (const char& character : expression)
+    // Looping through all the characters in the string in reverse
+    for (std::string::const_reverse_iterator character{ expression.crbegin() }; character != expression.crend(); character++)
     {
-        // Parenthesis are Opossite because the string is reversed
+       // Parenthesis are Opossite because the string is reversed
 
        // Skip if it's a space
-       if (character == ' ') { continue; }
+       if (*character == ' ') { continue; }
 
        // Mark as inside a parenthesis
-       if (character == ')') 
+       if (*character == ')') 
        {
-           operationStack.push(character);
+           operationStack.push(*character);
            continue;
        }
 
        // Calculate the prior Operation
-       else if (character == '(') 
+       else if (*character == '(') 
        {
 
            // Go through all the string between the last ( and this )
@@ -101,19 +101,18 @@ std::string evaluateExpression(const std::string& expression)
        }
 
        // Operators
-       else if (isOperator(character)) 
+       else if (isOperator(*character)) 
        {
-           operationStack.push(character);
+           operationStack.push(*character);
        }
 
        // Numbers
        else 
        {
            // Conversion from char to int (ASCII table)
-           numberStack.push(character - 48);
+           numberStack.push(*character - '0');
        }
     }
-
 
     std::cout << "-----------------------------------\n";
 
@@ -162,20 +161,11 @@ std::string evaluateExpression(const std::string& expression)
     return std::to_string(numberQueue.front());
 }
 
-// Function to reverse the string (made in a function because it looks cool)
-void reverse(std::string& expression) 
-{
-    std::reverse(expression.begin(), expression.end());
-}
-
 int main() {
     std::cout << "Enter an expression to calculate: ";
     std::string expression;
     std::getline(std::cin, expression);
-
-    // Reverse the string --> work with std::stack
-    reverse(expression);
-
+    
     // Make all the Calculations + output
     std::string result{ evaluateExpression(expression) };
     std::cout << "\nFinal result is " << result << '\n';
