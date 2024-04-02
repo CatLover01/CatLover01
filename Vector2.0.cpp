@@ -29,7 +29,7 @@ public:
 	}
 	void print() {
 		for (int i{}; i < m_size; i++) {
-			std::cout << *(m_ptr.get() + i) << '\n';
+			std::cout << m_ptr[i] << '\n';
 		}
 	} 
 	T& operator[](unsigned int index) {
