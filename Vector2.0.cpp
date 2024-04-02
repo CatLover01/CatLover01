@@ -15,15 +15,14 @@ private:
 	int m_size;
 	int m_capacity;
 	std::unique_ptr<T[]>m_ptr;
-	bool isReset{false};
 
 public:
-	Pector(int capacity) : m_capacity{ static_cast<int>(capacity + (capacity * 0.75)) },
+	Pector(int capacity) : m_capacity{ list.size() * 2 },
 		m_size{ capacity }, m_ptr{ std::make_unique<T[]>(m_capacity) } {}
-	Pector(std::initializer_list<T> list) : m_capacity{ static_cast<int>(list.size() + (list.size() * 0.75)) },
+	Pector(std::initializer_list<T> list) : m_capacity{ list.size() * 2) },
 		m_size{ static_cast<int>(list.size()) }, m_ptr{ std::make_unique<T[]>(m_capacity) } {
 		int num{ 0 };
-		for (auto it{ list.begin() }; it != list.end(); it++) {
+		for (auto it : list) {
 			m_ptr[num] = *it;
 			num++;
 		}
@@ -33,41 +32,38 @@ public:
 			std::cout << *(m_ptr.get() + i) << '\n';
 		}
 	} 
-	T& operator[](int index) {
+	T& operator[](unsigned int index) {
 		if (index < m_size) {
-			return *(m_ptr.get() + index);
+			return m_ptr[index];
 		}
 		throw std::out_of_range("Access is Out of Bounds");
 	}
 	void pop_back() {
 		if (m_size > 0) {
-			*(m_ptr.get() + (m_size - 1)) = 0;
+			m_ptr[m_size - 1] = 0;
 			m_size--;
 		}
 	}
 	void push_back(T value) {
-		if (isReset) {
+		if (!m_ptr) {
 			m_ptr = std::make_unique<T[]>(newCapacity); // No magic number so a Macro...
-			isReset = false;
 		}
 		if (m_size >= m_capacity) {
 			m_size++;
-			m_capacity = static_cast<int>(m_size + (m_size * 0.75)); // Increasing the Array Capacity Geometrically
-			std::unique_ptr<T[]>tempPtr{ std::make_unique<T[]>(m_capacity) };
+			m_capacity = m_size * 2; // Increasing the Array Capacity Geometrically
+			auto tempPtr{ std::make_unique<T[]>(m_capacity) };
 
-			if (std::is_trivially_copyable_v<T> == true) {
-				// Faster
+			if (std::is_trivially_copyable_v<T>) {
 				std::memcpy(tempPtr.get(), m_ptr.get(), sizeof m_ptr);
-				*(tempPtr.get() + (m_size - 1)) = value;
+				tempPtr[m_size - 1] = value;
 			}
 			else {
-				// Slower
 				for (int i{}; i < m_capacity; i++) {
 					if (i == m_capacity - 1) {
-						*(tempPtr.get() + i) = value;
+						tempPtr[i] = value;
 					}
 					else {
-						*(tempPtr.get() + i) = *(m_ptr.get() + i);
+						tempPtr[i] = m_ptr[i];
 					}
 				}
 			}
@@ -87,7 +83,6 @@ public:
 		m_size = 0;
 		m_capacity = 0;
 		m_ptr.reset();
-		isReset = true;
 	}
 	T* begin() { return m_ptr.get(); } // Iterators
 	T* end() { return m_ptr.get() + m_size; }
