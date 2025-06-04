@@ -12,10 +12,11 @@ I'm a developer and aspiring entrepreneur passionate about making the world a be
 #
 
 ### Stats
-<div align="center" style="display: flex; align-items: center; justify-content: center;">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=CatLover01&theme=dark&hide_border=false&include_all_commits=false&count_private=false&layout=compact" width="39%" />
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=CatLover01&theme=dark&hide_border=false&include_all_commits=false&count_private=false&layout=compact" width="390" />
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://github-readme-stats.vercel.app/api?username=CatLover01&theme=dark&hide_border=false&include_all_commits=false&count_private=false" width="58%" />
+  <img src="https://github-readme-stats.vercel.app/api?username=CatLover01&theme=dark&hide_border=false&include_all_commits=false&count_private=false" width="580" />
 </div>
+
 
 #
