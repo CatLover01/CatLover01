@@ -13,10 +13,31 @@ I'm a developer and aspiring entrepreneur passionate about making the world a be
 
 ### Stats
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=CatLover01&theme=dark&hide_border=false&include_all_commits=false&count_private=false&layout=compact" width="320" />
+  <picture>
+    <source 
+      srcset="https://github-readme-stats.vercel.app/api/top-langs/?username=CatLover01&theme=dark&hide_border=false&include_all_commits=false&count_private=false&layout=compact"
+      media="(prefers-color-scheme: dark)"
+    />
+    <source
+      srcset="https://github-readme-stats.vercel.app/api/top-langs/?username=CatLover01&theme=default&hide_border=false&include_all_commits=false&count_private=false&layout=compact"
+      media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
+    />
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=CatLover01&theme=default&hide_border=false&include_all_commits=false&count_private=false&layout=compact" width="390" />
+  </picture>
     &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github-readme-stats.vercel.app/api?username=CatLover01&theme=dark&hide_border=false&include_all_commits=false&count_private=false" width="470" />
+  <picture>
+    <source 
+      srcset="https://github-readme-stats.vercel.app/api?username=CatLover01&theme=dark&hide_border=false&include_all_commits=false&count_private=false"
+      media="(prefers-color-scheme: dark)"
+    />
+    <source
+      srcset="https://github-readme-stats.vercel.app/api?username=CatLover01&theme=default&hide_border=false&include_all_commits=false&count_private=false"
+      media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
+    />
+    <img src="https://github-readme-stats.vercel.app/api?username=CatLover01&theme=default&hide_border=false&include_all_commits=false&count_private=false" width="580" />
+  </picture>
 </div>
+
 
 
 #
