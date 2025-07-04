@@ -1,5 +1,7 @@
 # 🚀 CatLover01
 I'm a developer and aspiring entrepreneur passionate about making the world a better place through technology. My journey is all about creating better software, exploring system administration, and building the skills I need to launch my own startup someday. I also write blogs about my experiences and insights at [https://catlover01.github.io/](https://catlover01.github.io/).
+<br />  
+<img src="https://komarev.com/ghpvc/?username=CatLover01" alt="views" />
 
 ---
 
